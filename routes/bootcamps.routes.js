@@ -19,7 +19,7 @@ router.post('/', (req, res) => {
 });
 
 // PUT to update existing bootcamp
-router.put('/:id', (req, res) => {
+router.put('/:id', res => {
 	res
 		.status(200)
 		.json({ success: true, msg: `Updated Bootcamp #${req.params.id}` });
