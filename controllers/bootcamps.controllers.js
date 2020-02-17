@@ -1,4 +1,4 @@
-// set up middleware functions
+// set up middleware functions:
 // @ desc           GET all bootcamps
 // @route           GET /api/v1/bootcamps
 // @access          Public
@@ -10,9 +10,10 @@ exports.getBootcamps = (req, res, next) => {
 // @route           GET /api/v1/bootcamps/:id
 // @access          Public
 exports.getBootcamp = (req, res, next) => {
-	res
-		.status(200)
-		.json({ success: true, msg: `This will show Bootcamp #${req.params.id}` });
+	res.status(200).json({
+		success: true,
+		msg: `This will show Bootcamp #${req.params.id}`
+	});
 };
 
 // @ desc           Create a new bootcamp
