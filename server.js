@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const colors = require('colors');
 const connectDB = require('./config/db');
 
 // replaced by morgan:
@@ -18,6 +19,9 @@ connectDB();
 
 const app = express();
 
+// body parser:
+app.use(express.json());
+
 // use morgan to create dev logging middleware:
 if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
@@ -30,12 +34,14 @@ const PORT = process.env.PORT || 7000;
 
 const server = app.listen(
 	PORT,
-	console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+	console.log(
+		`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.bgGrey
+	)
 );
 
 // Handle unhandled promise rejections:
 process.on('unhandledRejection', (err, promise) => {
-	console.log(`Error: Unhandled Rejection ${err.message}`);
+	console.log(`Error: Unhandled Rejection ${err.message}`.red);
 	// shut down the app and close the process in this case:
 	server.close(() => {
 		process.exit(1);

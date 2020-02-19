@@ -1,3 +1,5 @@
+const Bootcamp = require('../models/Bootcamp.model');
+
 // set up middleware functions:
 // @ desc           GET all bootcamps
 // @route           GET /api/v1/bootcamps
@@ -19,8 +21,12 @@ exports.getBootcamp = (req, res, next) => {
 // @ desc           Create a new bootcamp
 // @route           POST /api/v1/bootcamps
 // @access          Private
-exports.createBootcamp = (req, res, next) => {
-	res.status(200).json({ success: true, msg: `Created a new bootcamp!` });
+exports.createBootcamp = async (req, res, next) => {
+	const bootcamp = await Bootcamp.create(req.body);
+	res.status(201).json({
+		success: true,
+		data: bootcamp
+	});
 };
 
 // @ desc           Update a specific bootcamp
