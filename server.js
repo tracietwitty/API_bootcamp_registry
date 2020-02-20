@@ -9,11 +9,11 @@ const connectDB = require('./config/db');
 // const logger = require('./middleware/logger.middleware');
 // app.use(logger);
 
-// route files:
-const bootcamps = require('./routes/bootcamps.routes');
-
 // load env vars:
 dotenv.config({ path: './config/config.env' });
+
+// route files:
+const bootcamps = require('./routes/bootcamps.routes');
 
 // connect to database:
 connectDB();
