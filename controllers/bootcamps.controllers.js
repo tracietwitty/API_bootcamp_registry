@@ -10,14 +10,41 @@ const Bootcamp = require('../models/Bootcamp.model');
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
 	let query;
 
-	let queryString = JSON.stringify(req.query);
+	const requestQueryCopy = { ...req.query };
+
+	let queryString = JSON.stringify(requestQueryCopy);
+
+	// Set up fields to exclude:
+	const removeFields = ['select'];
+
+	// Loop over removeFields and delete from requestQueryCopy:
+	removeFields.forEach(param => delete requestQueryCopy[param]);
+
+	// Checkpoint:
+	// console.log(requestQueryCopy)
+
+	// Create operators like $gt (greater than), $lte (less than/equal to):
 	queryString = queryString.replace(
 		/\b(gt|gte|lt|lte|in)\b/g,
 		match => `$${match}`
 	);
 
+	// Find resource:
 	query = Bootcamp.find(JSON.parse(queryString));
 
+	// Select specific fields:
+	if (req.query.select) {
+		const fields = req.query.select.split(',').join(' ');
+		query = query.select(fields);
+	}
+
+	// Sort by query or by date as default:
+	if (req.query.sort) {
+		const sortBy = req.query.sort.split(',').join(' ');
+		query = query.sort(sortBy);
+	} else {
+		query = query.sort('-createdAt');
+	}
 	const bootcamps = await query;
 
 	res
