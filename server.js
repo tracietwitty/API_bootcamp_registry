@@ -14,7 +14,7 @@ dotenv.config({ path: './config/config.env' });
 
 // route files:
 const bootcamps = require('./routes/bootcamps.routes');
-
+const courses = require('./routes/courses.routes');
 // connect to database:
 connectDB();
 
@@ -30,6 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // mount routers for more readable endpoints in controllers file:
 app.use('/api/v1/bootcamps', bootcamps);
+app.use('/api/v1/courses', courses);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 7000;
