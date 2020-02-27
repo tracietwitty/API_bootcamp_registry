@@ -11,14 +11,14 @@ const {
 
 const Bootcamp = '../models/Bootcamp.model.js';
 
-// Advanced results mw:
-const advancedResults = require('../middleware/advancedResults');
-
 // Include other resource routers:
 const courseRouter = require('./courses.routes');
 
 // Router setup:
 const router = express.Router();
+
+// Advanced results middleware:
+const advancedResults = require('../middleware/advancedResults');
 
 // Re-route into other resource routers:
 router.use('/:bootcampId/courses', courseRouter);

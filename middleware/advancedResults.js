@@ -1,35 +1,34 @@
 const advancedResults = (model, populate) => async (req, res, next) => {
 	let query;
 
-	const requestQueryCopy = { ...req.query };
+	// Copy req.query
+	const requestQueryString = { ...req.query };
 
-	let queryString = JSON.stringify(requestQueryCopy);
-
-	// Set up fields to exclude:
+	// Fields to exclude
 	const removeFields = ['select', 'sort', 'page', 'limit'];
 
-	// Loop over removeFields and delete from requestQueryCopy:
-	removeFields.forEach(param => delete requestQueryCopy[param]);
+	// Loop over removeFields and delete them from requestQueryString
+	removeFields.forEach(param => delete requestQueryString[param]);
 
-	// Checkpoint:
-	// console.log(requestQueryCopy)
+	// Create query string
+	let queryString = JSON.stringify(requestQueryString);
 
-	// Create operators like $gt (greater than), $lte (less than/equal to):
+	// Create operators ($gt, $gte, etc)
 	queryString = queryString.replace(
 		/\b(gt|gte|lt|lte|in)\b/g,
 		match => `$${match}`
 	);
 
-	// Find resource:
+	// Finding resource
 	query = model.find(JSON.parse(queryString));
 
-	// Select specific fields:
+	// Select Fields
 	if (req.query.select) {
 		const fields = req.query.select.split(',').join(' ');
 		query = query.select(fields);
 	}
 
-	// Sort by query or by date as default:
+	// Sort
 	if (req.query.sort) {
 		const sortBy = req.query.sort.split(',').join(' ');
 		query = query.sort(sortBy);
@@ -37,7 +36,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 		query = query.sort('-createdAt');
 	}
 
-	// Set up pagination with page 1 and 25 results showing per page as default:
+	// Pagination
 	const page = parseInt(req.query.page, 10) || 1;
 	const limit = parseInt(req.query.limit, 10) || 25;
 	const startIndex = (page - 1) * limit;
@@ -50,17 +49,19 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 		query = query.populate(populate);
 	}
 
-	// Execute the query:
+	// Executing query
 	const results = await query;
 
-	// Pagination result:
+	// Pagination result
 	const pagination = {};
+
 	if (endIndex < total) {
 		pagination.next = {
 			page: page + 1,
 			limit
 		};
 	}
+
 	if (startIndex > 0) {
 		pagination.prev = {
 			page: page - 1,
