@@ -9,7 +9,7 @@ const {
 	bootcampPhotoUpload
 } = require('../controllers/bootcamps.controllers');
 
-const Bootcamp = '../models/Bootcamp.model.js';
+const Bootcamp = require('../models/Bootcamp.model.js');
 
 // Include other resource routers:
 const courseRouter = require('./courses.routes');
