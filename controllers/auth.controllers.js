@@ -17,8 +17,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 
 	// Create token:
 	const token = user.getSignedToken;
-	console.log(token);
 
 	// Send the token in the response
-	res.status(200).json({ success: true, token });
+	res.status(200).json({ success: true, token: token });
 });
